@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Zenkari Audio Engine</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
@@ -11,198 +11,254 @@
   --bg:#06060e;--s1:#0d0d1a;--s2:#111120;--s3:#161628;
   --bd:rgba(255,255,255,.07);
   --px:#ff2d78;--py:#ff7c00;--ok:#00e887;--warn:#ffb800;
-  --grad:linear-gradient(135deg,#ff2d78,#ff7c00);
   --tx:#e0e0f0;--dim:#50507a;
 }
-html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'Space Mono',monospace;font-size:12px;overflow:hidden;user-select:none}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Space Mono',monospace;font-size:12px;user-select:none}
 
-/* ── LAYOUT FIXE ── */
-#app{
-  display:grid;
-  grid-template-rows:48px 1fr 130px;
-  grid-template-columns:200px 1fr 180px;
-  height:100vh;
-  width:100vw;
-}
+/* ══ LAYOUT ══ */
+#app{position:fixed;inset:0;display:grid;grid-template-columns:210px 1fr 190px;grid-template-rows:46px 1fr 128px}
 
-/* ── HEADER (pleine largeur) ── */
-#hdr{
-  grid-column:1/-1;
-  background:var(--s1);
-  border-bottom:1px solid var(--bd);
-  display:flex;align-items:center;gap:12px;padding:0 16px;
+/* ── HEADER ── */
+header{
+  grid-column:1/-1;grid-row:1;
+  background:var(--s1);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:10px;padding:0 14px;overflow:hidden;
 }
-#logo{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
-.hbtn{background:none;border:1px solid var(--bd);border-radius:4px;color:var(--tx);font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+#logo{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  background:linear-gradient(135deg,#ff2d78,#ff7c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;flex-shrink:0}
+.sep{width:1px;height:22px;background:var(--bd);flex-shrink:0}
+.hbtn{background:none;border:1px solid var(--bd);border-radius:4px;color:var(--tx);
+  font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .hbtn:hover{border-color:var(--px);color:var(--px)}
 .hbtn.on{background:rgba(255,45,120,.15);border-color:var(--px);color:var(--px)}
 .hbtn.go{background:var(--ok);border-color:var(--ok);color:#000;font-weight:700}
 .hbtn.stop{background:var(--px);border-color:var(--px);color:#fff;font-weight:700}
-#st-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);flex-shrink:0}
+#st-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);flex-shrink:0;transition:background .3s}
 #st-dot.on{background:var(--ok);box-shadow:0 0 6px var(--ok)}
-#st-txt{font-size:10px;color:var(--dim)}
-.hsep{width:1px;height:24px;background:var(--bd);flex-shrink:0}
+#st-txt{font-size:10px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── LEFT ── */
-#left{
-  background:var(--s1);border-right:1px solid var(--bd);
-  overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;
-  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;
-}
-.card{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:10px}
-.card-title{font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
-.row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+aside#left{grid-column:1;grid-row:2/4;background:var(--s1);border-right:1px solid var(--bd);overflow-y:auto;overflow-x:hidden;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.card{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:8px}
+.ct{font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
+.row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
 .row:last-child{margin-bottom:0}
-.row label{font-size:10px;color:var(--dim);flex-shrink:0;width:56px}
-.row select{flex:1;background:var(--s3);border:1px solid var(--bd);border-radius:3px;color:var(--tx);font-family:'Space Mono',monospace;font-size:10px;padding:3px 6px;cursor:pointer;outline:none;min-width:0}
-.row select:focus{border-color:var(--px)}
+.row label{font-size:10px;color:var(--dim);flex-shrink:0;width:54px}
 .row input[type=range]{flex:1;accent-color:var(--px);height:3px;cursor:pointer;min-width:0}
-.row .val{font-size:9px;color:var(--py);width:30px;text-align:right;flex-shrink:0}
-.tog{position:relative;width:32px;height:18px;flex-shrink:0;cursor:pointer}
+.row .val{font-size:9px;color:var(--py);width:32px;text-align:right;flex-shrink:0}
+.tog{position:relative;width:32px;height:18px;flex-shrink:0}
 .tog input{opacity:0;width:0;height:0;position:absolute}
-.tog-knob{position:absolute;inset:0;background:var(--s3);border-radius:9px;border:1px solid var(--bd);transition:.2s}
-.tog-knob::before{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:var(--dim);top:2px;left:2px;transition:.2s}
-.tog input:checked~.tog-knob{background:rgba(255,45,120,.2);border-color:var(--px)}
-.tog input:checked~.tog-knob::before{transform:translateX(14px);background:var(--px)}
+.tok{position:absolute;inset:0;background:var(--s3);border:1px solid var(--bd);border-radius:9px;cursor:pointer;transition:.2s}
+.tok::before{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:var(--dim);top:2px;left:2px;transition:.2s}
+.tog input:checked~.tok{background:rgba(255,45,120,.2);border-color:var(--px)}
+.tog input:checked~.tok::before{transform:translateX(14px);background:var(--px)}
+.notch-btn{width:100%;margin-top:6px;padding:4px;background:rgba(255,45,120,.1);border:1px solid var(--px);border-radius:4px;color:var(--px);font-family:'Space Mono',monospace;font-size:9px;cursor:pointer}
+.notch-btn:hover{background:rgba(255,45,120,.2)}
 
 /* ── CENTER ── */
-#center{background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
-#spectrum-wrap{flex:1;position:relative;min-height:0}
-#cv-spec{display:block;width:100%;height:100%}
-#eq-wrap{background:var(--s1);border-top:1px solid var(--bd);padding:10px 14px;flex-shrink:0}
-.eq-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.eq-head-title{font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.15em;color:var(--dim);text-transform:uppercase}
-.eq-presets{display:flex;gap:4px;flex-wrap:wrap}
-.ep{background:var(--s2);border:1px solid var(--bd);border-radius:3px;color:var(--dim);font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;cursor:pointer;transition:all .12s}
+main#center{grid-column:2;grid-row:2;display:flex;flex-direction:column;overflow:hidden}
+#spec-wrap{flex:1;min-height:0;position:relative}
+canvas#cv{display:block;width:100%;height:100%}
+#eq-area{background:var(--s1);border-top:1px solid var(--bd);padding:10px 12px;flex-shrink:0}
+.eq-head{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.eq-title{font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.ep{background:var(--s2);border:1px solid var(--bd);border-radius:3px;color:var(--dim);font-family:'Space Mono',monospace;font-size:9px;padding:2px 6px;cursor:pointer;transition:all .12s}
 .ep:hover{border-color:var(--px);color:var(--px)}
 .ep.on{background:rgba(255,45,120,.12);border-color:var(--px);color:var(--px)}
-#eq-bands{display:flex;gap:4px;justify-content:center;align-items:flex-end}
+#eq-bands{display:flex;gap:4px;justify-content:center}
 .eb{display:flex;flex-direction:column;align-items:center;gap:2px}
 .eb label{font-size:8px;color:var(--dim)}
-.eb input[type=range]{writing-mode:vertical-lr;direction:rtl;width:28px;height:80px;accent-color:var(--px);cursor:pointer}
-.eb .ev{font-size:9px;color:var(--py);text-align:center;min-width:32px}
+.eb input[type=range]{writing-mode:vertical-lr;direction:rtl;width:26px;height:72px;accent-color:var(--px);cursor:pointer}
+.eb .ev{font-size:9px;color:var(--py);width:28px;text-align:center}
 
 /* ── RIGHT ── */
-#right{
-  background:var(--s1);border-left:1px solid var(--bd);
-  overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;
-  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;
-}
-/* VU */
-.vu-wrap{display:flex;gap:5px;height:100px;align-items:flex-end}
-.vu-ch{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+aside#right{grid-column:3;grid-row:2/4;background:var(--s1);border-left:1px solid var(--bd);overflow-y:auto;overflow-x:hidden;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(255,45,120,.4) transparent}
+.vu-wrap{display:flex;gap:6px;height:70px}
+.vu-ch{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
 .vu-track{flex:1;width:100%;background:var(--s3);border-radius:2px;overflow:hidden;position:relative}
-.vu-fill{width:100%;height:0%;position:absolute;bottom:0;border-radius:2px;transition:height .05s}
-.vu-fill.L{background:linear-gradient(to top,#00e887 60%,#ffb800 85%,#ff2d78 100%)}
-.vu-fill.R{background:linear-gradient(to top,#00e887 60%,#ffb800 85%,#ff2d78 100%)}
-.vu-lbl{font-size:8px;color:var(--dim)}
-/* Meters */
-.mt-row{display:flex;align-items:center;gap:5px;margin-bottom:4px}
-.mt-lbl{font-size:9px;color:var(--dim);width:28px;flex-shrink:0}
-.mt-bar{flex:1;height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
-.mt-fill{height:100%;border-radius:2px;transition:width .1s}
-.mt-val{font-size:9px;color:var(--py);width:34px;text-align:right;flex-shrink:0}
+.vu-fill{position:absolute;bottom:0;width:100%;height:0%;border-radius:2px;transition:height .06s}
+.vu-fill.L,.vu-fill.R{background:linear-gradient(to top,#00e887 55%,#ffb800 82%,#ff2d78 100%)}
+.vu-lb{font-size:8px;color:var(--dim)}
+.mrow{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.mrow:last-child{margin-bottom:0}
+.mlb{font-size:9px;color:var(--dim);width:28px;flex-shrink:0}
+.mbar{flex:1;height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
+.mfill{height:100%;border-radius:2px;transition:width .1s}
+.mval{font-size:9px;color:var(--py);width:32px;text-align:right;flex-shrink:0}
 #dom-freq{font-size:18px;font-family:'Syne',sans-serif;font-weight:800;color:var(--py);text-align:center;padding:2px 0}
 #dom-note{font-size:10px;color:var(--dim);text-align:center}
+/* Détecteur */
+.det-item{display:flex;align-items:center;gap:5px;padding:3px 0;border-bottom:1px solid var(--bd)}
+.det-item:last-child{border:none}
+.det-freq{font-size:10px;color:var(--py);width:38px;flex-shrink:0}
+.det-type{font-size:9px;color:var(--dim);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.det-sev{font-size:8px;padding:1px 4px;border-radius:3px;flex-shrink:0}
+.det-sev.h{background:rgba(255,45,120,.15);color:var(--px)}
+.det-sev.l{background:rgba(255,184,0,.15);color:var(--warn)}
+.det-fix{font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(0,232,135,.1);border:1px solid rgba(0,232,135,.3);color:var(--ok);cursor:pointer;flex-shrink:0}
+.det-fix:hover{background:rgba(0,232,135,.2)}
+#det-status{font-size:9px;min-height:14px}
+#det-status.ok{color:var(--ok)}
+#det-status.warn{color:var(--warn)}
+.det-btns{display:flex;gap:4px;margin-top:6px}
+.dbt{flex:1;padding:4px 6px;border-radius:3px;border:1px solid var(--bd);background:var(--s3);color:var(--tx);font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .12s;text-align:center}
+.dbt:hover{border-color:var(--ok);color:var(--ok)}
+.dbt.on{background:rgba(0,232,135,.1);border-color:var(--ok);color:var(--ok)}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.dot.grey{background:var(--dim)}
+.dot.green{background:var(--ok)}
+.dot.red{background:var(--px)}
+.dot.pulse{background:var(--warn);animation:pl .7s ease-in-out infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* ── BOTTOM (pleine largeur) ── */
-#bottom{
-  grid-column:1/-1;
-  background:var(--s1);border-top:1px solid var(--bd);
-  display:grid;grid-template-columns:1fr 1fr 1fr;
-}
-.bs{padding:10px 14px;border-right:1px solid var(--bd)}
-.bs:last-child{border-right:none}
-.bs-title{font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
-/* Compresseur */
-.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-.ci{display:flex;flex-direction:column;gap:2px}
-.ci label{font-size:8px;color:var(--dim)}
+/* ── BOTTOM ── */
+footer#bottom{grid-column:2/3;grid-row:3;background:var(--s1);border-top:1px solid var(--bd);display:grid;grid-template-columns:1fr 1fr}
+.bs{padding:10px 12px;border-right:1px solid var(--bd)}
+.bs:last-child{border:none}
+.bst{font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:7px}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ci label{font-size:8px;color:var(--dim);display:block;margin-bottom:1px}
 .ci input[type=range]{width:100%;accent-color:var(--py);height:3px;cursor:pointer}
-.ci .cv{font-size:9px;color:var(--py)}
-/* Presets système */
+.cv{font-size:9px;color:var(--py)}
 .sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.sys-btn{background:var(--s2);border:1px solid var(--bd);border-radius:4px;color:var(--tx);font-family:'Space Mono',monospace;font-size:9px;padding:4px 6px;cursor:pointer;transition:all .12s;text-align:center}
+.sys-btn{background:var(--s2);border:1px solid var(--bd);border-radius:4px;color:var(--tx);font-family:'Space Mono',monospace;font-size:9px;padding:4px 5px;cursor:pointer;transition:all .12s;text-align:center}
 .sys-btn:hover{border-color:var(--px);color:var(--px)}
 .sys-btn.on{background:rgba(255,45,120,.12);border-color:var(--px);color:var(--px)}
-/* Effets */
-.eff-grid{display:flex;flex-direction:column;gap:5px}
-.eff-row{display:flex;align-items:center;gap:6px}
-.eff-row label{font-size:9px;color:var(--dim);width:60px;flex-shrink:0}
-.eff-row input[type=range]{flex:1;accent-color:var(--px);height:3px;cursor:pointer}
-.eff-row .ev{font-size:9px;color:var(--py);width:30px;text-align:right}
 
-/* Toast */
-#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:7px 14px;font-size:11px;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:99;pointer-events:none;white-space:nowrap}
+/* ── GUIDE MODAL ── */
+#guide{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+#guide.show{display:flex}
+.gbox{background:var(--s1);border:1px solid rgba(255,45,120,.4);border-radius:10px;padding:22px;max-width:460px;width:90%}
+.gbox h2{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--px);margin-bottom:12px}
+.gstep{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.gnum{width:22px;height:22px;border-radius:50%;background:var(--px);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.gtxt{font-size:11px;line-height:1.6}
+.gtxt strong{color:var(--py)}
+.gnote{font-size:10px;color:var(--dim);margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);line-height:1.5}
+.gbr{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+.gbtn{padding:6px 14px;border-radius:4px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;border:none}
+.gbtn.ok{background:var(--ok);color:#000;font-weight:700}
+.gbtn.sk{background:var(--s2);color:var(--dim);border:1px solid var(--bd)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--s2);border:1px solid var(--bd);border-radius:5px;padding:6px 14px;font-size:11px;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:300;pointer-events:none;white-space:nowrap}
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 #toast.ok{border-color:rgba(0,232,135,.4);color:var(--ok)}
 #toast.warn{border-color:rgba(255,184,0,.4);color:var(--warn)}
 
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:rgba(255,45,120,.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,45,120,.6)}
+aside#right .card{flex-shrink:0}
+aside#left .card{flex-shrink:0}
+aside#right::-webkit-scrollbar{width:4px}
+aside#right::-webkit-scrollbar-thumb{background:rgba(255,45,120,.4);border-radius:3px}
 </style>
 </head>
 <body>
 <div id="toast"></div>
+
+<!-- GUIDE MODAL -->
+<div id="guide">
+  <div class="gbox">
+    <h2>🔊 App bureau — Supprimer l'écho</h2>
+    <p style="font-size:11px;color:var(--dim);margin-bottom:12px;line-height:1.6">Apple Music joue directement vers les hauts-parleurs ET notre outil aussi → deux signaux = écho + son métallique. Il faut couper la sortie directe de l'app.</p>
+    <div class="gstep"><div class="gnum">1</div><div class="gtxt">Clic droit sur l'icône <strong>🔊</strong> dans la barre des tâches Windows</div></div>
+    <div class="gstep"><div class="gnum">2</div><div class="gtxt">Cliquer <strong>Ouvrir le Mélangeur de volume</strong></div></div>
+    <div class="gstep"><div class="gnum">3</div><div class="gtxt">Trouver <strong>Apple Music</strong> et mettre le volume à <strong>0</strong></div></div>
+    <div class="gstep"><div class="gnum">4</div><div class="gtxt">Tu entends seulement la version traitée par <strong>Zenkari EQ</strong></div></div>
+    <div class="gnote">💡 Plus simple : utilise <strong>music.apple.com</strong> dans Chrome — la capture d'onglet évite automatiquement le doublé.</div>
+    <div class="gbr">
+      <button class="gbtn sk" onclick="closeGuide()">Plus tard</button>
+      <button class="gbtn ok" onclick="closeGuide()">✓ C'est fait</button>
+    </div>
+  </div>
+</div>
+
 <div id="app">
 
 <!-- HEADER -->
-<header id="hdr">
+<header>
   <div id="logo">ZENKARI AUDIO ENGINE</div>
-  <div class="hsep"></div>
-  <button class="hbtn go" id="btn-start" onclick="startEngine()">&#9654; Capturer son PC</button>
-  <button class="hbtn stop" id="btn-stop" onclick="stopEngine()" style="display:none">&#9632; Arrêter</button>
-  <div class="hsep"></div>
+  <div class="sep"></div>
+  <button class="hbtn go" id="btn-start" onclick="startEngine()">▶ Capturer son PC</button>
+  <button class="hbtn stop" id="btn-stop" onclick="stopEngine()" style="display:none">■ Arrêter</button>
+  <div class="sep"></div>
   <button class="hbtn on" id="btn-bp" onclick="toggleBypass()">EQ ON</button>
   <button class="hbtn" onclick="resetEQ()">Reset EQ</button>
-  <button class="hbtn" onclick="showGuide()" title="Comment éviter le bruit avec les apps bureau">? Anti-bruit</button>
-  <div class="hsep"></div>
-  <div id="st-dot"></div>
-  <span id="st-txt">Onglet Chrome: sans doublure &nbsp;|&nbsp; App bureau: muter dans le Mélangeur de volume Windows</span>
+  <button class="hbtn" onclick="document.getElementById('guide').classList.add('show')">? Anti-écho</button>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:7px">
+    <div id="st-dot"></div>
+    <span id="st-txt">Cliquez "Capturer son PC" → choisissez un onglet avec son</span>
+  </div>
 </header>
 
 <!-- LEFT -->
 <aside id="left">
 
   <div class="card">
-    <div class="card-title">Volume &amp; Sortie</div>
+    <div class="ct">Volume</div>
     <div class="row"><label>Master</label><input type="range" id="r-master" min="0" max="150" value="100" oninput="setMaster(this.value)"><span class="val" id="v-master">100%</span></div>
-    <div class="row"><label>Entrée</label><input type="range" id="r-input" min="0" max="200" value="100" oninput="setInputGain(this.value)"><span class="val" id="v-input">100%</span></div>
+    <div class="row"><label>Entrée</label><input type="range" id="r-input" min="0" max="200" value="100" oninput="setInput(this.value)"><span class="val" id="v-input">100%</span></div>
   </div>
 
   <div class="card">
-    <div class="card-title">Stéréo</div>
-    <div class="row"><label>Largeur</label><input type="range" id="r-width" min="0" max="200" value="100" oninput="setStereoW(this.value)"><span class="val" id="v-width">100%</span></div>
+    <div class="ct">Stéréo</div>
+    <div class="row"><label>Largeur</label><input type="range" id="r-width" min="0" max="200" value="100" oninput="setWidth(this.value)"><span class="val" id="v-width">100%</span></div>
     <div class="row"><label>Pan</label><input type="range" id="r-pan" min="-100" max="100" value="0" oninput="setPan(this.value)"><span class="val" id="v-pan">C</span></div>
   </div>
 
   <div class="card">
-    <div class="card-title">Filtre passe-haut</div>
+    <div class="ct">Filtre passe-haut</div>
     <div class="row"><label>Coupure</label><input type="range" id="r-hpf" min="20" max="200" value="20" oninput="setHPF(this.value)"><span class="val" id="v-hpf">20Hz</span></div>
-    <div style="font-size:9px;color:var(--dim);margin-bottom:4px">Coupe tout sous cette fréquence</div>
   </div>
 
   <div class="card">
-    <div class="card-title">Notch (bruit parasite)</div>
-    <div class="row"><label>Fréquence</label><input type="range" id="r-notch" min="20" max="500" value="47" oninput="setNotchFreq(this.value)"><span class="val" id="v-notch">47Hz</span></div>
-    <div class="row"><label>Précision Q</label><input type="range" id="r-notchq" min="1" max="30" value="8" step="0.5" oninput="setNotchQ(this.value)"><span class="val" id="v-notchq">Q8</span></div>
-    <div class="row"><label>Activer</label><label class="tog"><input type="checkbox" id="chk-notch" onchange="setNotch(this.checked)"><span class="tog-knob"></span></label></div>
-    <button onclick="quickNotch47()" style="width:100%;background:rgba(255,45,120,.15);border:1px solid var(--px);border-radius:4px;color:var(--px);font-family:Space Mono,monospace;font-size:9px;padding:4px;cursor:pointer;margin-top:4px">⚡ Couper 47Hz maintenant</button>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Options</div>
+    <div class="ct">Notch — bruit parasite</div>
+    <div class="row"><label>Fréquence</label><input type="range" id="r-notchf" min="20" max="500" value="47" oninput="setNotchF(this.value)"><span class="val" id="v-notchf">47Hz</span></div>
+    <div class="row"><label>Précision</label><input type="range" id="r-notchq" min="1" max="30" value="10" step="0.5" oninput="setNotchQ(this.value)"><span class="val" id="v-notchq">Q10</span></div>
     <div class="row">
-      <label>Mono</label>
-      <label class="tog"><input type="checkbox" id="chk-mono" onchange="setMono(this.checked)"><span class="tog-knob"></span></label>
+      <label>Activer</label>
+      <label class="tog"><input type="checkbox" id="chk-notch" onchange="toggleNotch(this.checked)"><span class="tok"></span></label>
+    </div>
+    <button class="notch-btn" onclick="quickNotch47()">⚡ Couper 47Hz maintenant</button>
+  </div>
+
+  <div class="card">
+    <div class="ct">Réduction de bruit</div>
+    <div class="row">
+      <label>Gate</label>
+      <label class="tog"><input type="checkbox" id="chk-gate" onchange="setGate(this.checked)"><span class="tok"></span></label>
+    </div>
+    <div class="row" id="row-gate-thr">
+      <label>Seuil</label>
+      <input type="range" id="r-gate" min="-80" max="-20" value="-55" oninput="setGateThresh(this.value)">
+      <span class="val" id="v-gate">-55dB</span>
     </div>
     <div class="row">
-      <label>Phase inv.</label>
-      <label class="tog"><input type="checkbox" id="chk-phase" onchange="setPhase(this.checked)"><span class="tog-knob"></span></label>
+      <label>Air cut</label>
+      <label class="tog"><input type="checkbox" id="chk-aircut" onchange="setAirCut(this.checked)"><span class="tok"></span></label>
+    </div>
+    <div class="row" id="row-aircut">
+      <label>Coupure</label>
+      <input type="range" id="r-aircut" min="12000" max="22000" value="18000" oninput="setAirCutFreq(this.value)">
+      <span class="val" id="v-aircut">18k</span>
+    </div>
+    <div class="row">
+      <label>DC offset</label>
+      <label class="tog"><input type="checkbox" id="chk-dc" onchange="setDC(this.checked)" checked><span class="tok"></span></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Options</div>
+    <div class="row">
+      <label>Mono</label>
+      <label class="tog"><input type="checkbox" id="chk-mono" onchange="setMono(this.checked)"><span class="tok"></span></label>
     </div>
     <div class="row">
       <label>Compresseur</label>
-      <label class="tog"><input type="checkbox" id="chk-comp" onchange="setComp(this.checked)"><span class="tog-knob"></span></label>
+      <label class="tog"><input type="checkbox" id="chk-comp" onchange="setComp(this.checked)"><span class="tok"></span></label>
     </div>
   </div>
 
@@ -210,11 +266,12 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'Space Mo
 
 <!-- CENTER -->
 <main id="center">
-  <div id="spectrum-wrap"><canvas id="cv-spec"></canvas></div>
-  <div id="eq-wrap">
+  <div id="spec-wrap"><canvas id="cv"></canvas></div>
+  <div id="eq-area">
     <div class="eq-head">
-      <span class="eq-head-title">EQ 10 bandes</span>
-      <div class="eq-presets" id="eq-presets"></div>
+      <span class="eq-title">EQ 10 bandes</span>
+      <div id="eq-presets"></div>
+      <button class="ep" style="margin-left:auto" onclick="resetEQ()">Reset</button>
     </div>
     <div id="eq-bands"></div>
   </div>
@@ -222,60 +279,59 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'Space Mo
 
 <!-- RIGHT -->
 <aside id="right">
+
   <div class="card">
-    <div class="card-title">Niveaux</div>
+    <div class="ct">Niveaux</div>
     <div class="vu-wrap">
-      <div class="vu-ch">
-        <div class="vu-track"><div class="vu-fill L" id="vu-l"></div></div>
-        <div class="vu-lbl">L</div>
-      </div>
-      <div class="vu-ch">
-        <div class="vu-track"><div class="vu-fill R" id="vu-r"></div></div>
-        <div class="vu-lbl">R</div>
-      </div>
+      <div class="vu-ch"><div class="vu-track"><div class="vu-fill L" id="vu-l"></div></div><div class="vu-lb">L</div></div>
+      <div class="vu-ch"><div class="vu-track"><div class="vu-fill R" id="vu-r"></div></div><div class="vu-lb">R</div></div>
     </div>
   </div>
+
   <div class="card">
-    <div class="card-title">Mesures</div>
-    <div class="mt-row"><span class="mt-lbl">RMS</span><div class="mt-bar"><div class="mt-fill" id="m-rms" style="background:var(--ok)"></div></div><span class="mt-val" id="v-rms">— dB</span></div>
-    <div class="mt-row"><span class="mt-lbl">Peak</span><div class="mt-bar"><div class="mt-fill" id="m-peak" style="background:var(--py)"></div></div><span class="mt-val" id="v-peak">— dB</span></div>
-    <div class="mt-row"><span class="mt-lbl">LUFS</span><div class="mt-bar"><div class="mt-fill" id="m-lufs" style="background:var(--px)"></div></div><span class="mt-val" id="v-lufs">— LU</span></div>
+    <div class="ct">Mesures</div>
+    <div class="mrow"><span class="mlb">RMS</span><div class="mbar"><div class="mfill" id="m-rms" style="background:var(--ok)"></div></div><span class="mval" id="v-rms">—</span></div>
+    <div class="mrow"><span class="mlb">Peak</span><div class="mbar"><div class="mfill" id="m-peak" style="background:var(--py)"></div></div><span class="mval" id="v-peak">—</span></div>
+    <div class="mrow"><span class="mlb">LUFS</span><div class="mbar"><div class="mfill" id="m-lufs" style="background:var(--px)"></div></div><span class="mval" id="v-lufs">—</span></div>
   </div>
+
   <div class="card">
-    <div class="card-title">Freq. dominante</div>
+    <div class="ct">Freq. dominante</div>
     <div id="dom-freq">— Hz</div>
     <div id="dom-note">—</div>
   </div>
+
+  <div class="card">
+    <div class="ct"><span class="dot grey" id="det-dot"></span>Détecteur distorsion</div>
+    <div id="det-status" style="font-size:10px;color:var(--dim);min-height:16px">Lance la capture…</div>
+    <div id="det-list" style="margin-top:6px"></div>
+    <div class="det-btns">
+      <button class="dbt" id="dbt-auto" onclick="toggleAutoFix()">Auto</button>
+      <button class="dbt" onclick="manualScan()">Analyser</button>
+      <button class="dbt" onclick="clearFixes()">Reset</button>
+    </div>
+  </div>
+
 </aside>
 
 <!-- BOTTOM -->
 <footer id="bottom">
 
   <div class="bs">
-    <div class="bs-title">Compresseur</div>
-    <div class="comp-grid">
+    <div class="bst">Compresseur</div>
+    <div class="cg">
       <div class="ci"><label>Seuil</label><input type="range" id="c-thr" min="-60" max="0" value="-24" oninput="updComp()"><span class="cv" id="cv-thr">-24dB</span></div>
       <div class="ci"><label>Ratio</label><input type="range" id="c-rat" min="1" max="20" value="4" step=".5" oninput="updComp()"><span class="cv" id="cv-rat">4:1</span></div>
       <div class="ci"><label>Attack</label><input type="range" id="c-att" min="0" max="200" value="10" oninput="updComp()"><span class="cv" id="cv-att">10ms</span></div>
       <div class="ci"><label>Release</label><input type="range" id="c-rel" min="10" max="1000" value="150" oninput="updComp()"><span class="cv" id="cv-rel">150ms</span></div>
       <div class="ci"><label>Makeup</label><input type="range" id="c-mk" min="0" max="30" value="0" oninput="updComp()"><span class="cv" id="cv-mk">0dB</span></div>
-      <div class="ci"><label>Réduction</label><span class="cv" id="cv-gr">0dB</span></div>
+      <div class="ci"><label>Réduction</label><span class="cv" id="cv-gr">—</span></div>
     </div>
   </div>
 
   <div class="bs">
-    <div class="bs-title">Presets système</div>
+    <div class="bst">Presets système</div>
     <div class="sys-grid" id="sys-presets"></div>
-  </div>
-
-  <div class="bs">
-    <div class="bs-title">Effets</div>
-    <div class="eff-grid">
-      <div class="eff-row"><label>Reverb</label><input type="range" id="e-rev" min="0" max="100" value="0" oninput="setFx('rev',this.value)"><span class="ev" id="ev-rev">0%</span></div>
-      <div class="eff-row"><label>Delay</label><input type="range" id="e-dly" min="0" max="100" value="0" oninput="setFx('dly',this.value)"><span class="ev" id="ev-dly">0%</span></div>
-      <div class="eff-row"><label>Exciter</label><input type="range" id="e-exc" min="0" max="100" value="0" oninput="setFx('exc',this.value)"><span class="ev" id="ev-exc">0%</span></div>
-      <div class="eff-row"><label>Loudness</label><input type="range" id="e-lud" min="0" max="100" value="0" oninput="setFx('lud',this.value)"><span class="ev" id="ev-lud">0%</span></div>
-    </div>
   </div>
 
 </footer>
@@ -284,48 +340,49 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'Space Mo
 
 <script>
 'use strict';
-// ════════════════════════════════════════════════════
-// ZENKARI AUDIO ENGINE — Son PC (getDisplayMedia)
-// Capture la sortie audio de Windows/Mac via partage d'écran audio
-// ════════════════════════════════════════════════════
 
-let AC = null, stream = null, running = false, bypass = false;
-let inputGainNode = null, eqFilters = [], compNode = null, compMk = null;
-let pannerNode = null, masterNode = null, analyserNode = null;
-let compEnabled = false;
-let hpfNode = null, notchNode = null;
-let hpfFreq = 20, notchFreq = 47, notchQ = 8, notchEnabled = false;
-let eqV = new Array(10).fill(0);
+// ═══════════════════════════════════════════
+// ZENKARI AUDIO ENGINE
+// ═══════════════════════════════════════════
+let AC=null, stream=null, running=false, bypass=false, compEnabled=false, autoFix=false;
+let inputGain=null, hpfNode=null, notchNode=null, eqFilters=[], compNode=null, compMk=null, panNode=null, masterNode=null, analyserNode=null;
+let autoFilters=[], detInsertNode=null;
+let hpfFreq=20, notchFreq=47, notchQ=10, notchOn=false;
+let gateNode=null, airCutNode=null, dcNode=null;
+let gateOn=false, gateThresh=-55, airCutOn=false, airCutFreq=18000, dcOn=true;
+let lastScan=0;
+let eqV=new Array(10).fill(0);
 
-const EQ_FREQS = [60,170,310,600,1000,3000,6000,12000,14000,16000];
-const EQ_LABS  = ['60','170','310','600','1k','3k','6k','12k','14k','16k'];
+const EQ_FREQS=[60,170,310,600,1000,3000,6000,12000,14000,16000];
+const EQ_LABS=['60','170','310','600','1k','3k','6k','12k','14k','16k'];
 
-const EQ_PRESETS = {
-  'Neutre':     [0,0,0,0,0,0,0,0,0,0],
-  'Bass':       [9,7,5,2,0,0,0,0,0,0],
-  'Presence':   [0,0,0,2,5,6,5,3,2,1],
-  'Vocal':      [-2,0,2,5,6,5,3,0,-1,-2],
-  'Air':        [0,0,0,0,0,2,4,6,9,10],
-  'Hi-Fi':      [4,3,1,0,0,0,1,3,4,5],
-  'Warmth':     [4,4,2,1,0,-1,-2,-2,-2,-3],
-  'V-Shape':    [8,5,2,0,-2,-2,0,2,5,8],
+const EQ_PRESETS={
+  'Neutre':   [0,0,0,0,0,0,0,0,0,0],
+  'Bass':     [9,7,5,2,0,0,0,0,0,0],
+  'Presence': [0,0,0,2,5,6,5,3,2,1],
+  'Vocal':    [-2,0,2,5,6,5,3,0,-1,-2],
+  'Air':      [0,0,0,0,0,2,4,6,9,10],
+  'Hi-Fi':    [4,3,1,0,0,0,1,3,4,5],
+  'Warmth':   [4,4,2,1,0,-1,-2,-2,-2,-3],
+  'V-Shape':  [8,5,2,0,-2,-2,0,2,5,8],
 };
 
-const SYS_PRESETS = {
-  'Musique':    {eq:[3,2,0,0,0,0,2,3,4,3],  comp:{thr:-24,rat:2,att:30,rel:300,mk:2,on:false}},
-  'Cinéma':     {eq:[6,4,2,0,-1,-1,0,2,4,5], comp:{thr:-20,rat:3,att:15,rel:200,mk:4,on:true}},
-  'Gaming':     {eq:[6,4,2,0,0,0,2,4,5,4],   comp:{thr:-12,rat:3,att:5,rel:100,mk:3,on:true}},
-  'Podcast':    {eq:[-2,0,2,4,4,3,2,1,0,-1], comp:{thr:-20,rat:4,att:10,rel:150,mk:6,on:true}},
-  'Streaming':  {eq:[2,1,0,1,2,2,2,3,3,2],   comp:{thr:-16,rat:4,att:8,rel:120,mk:5,on:true}},
-  'Monitoring': {eq:[0,0,0,0,0,0,0,0,0,0],   comp:{thr:-18,rat:2,att:20,rel:200,mk:0,on:true}},
+const SYS_PRESETS={
+  'Musique':   {eq:[3,2,0,0,0,0,2,3,4,3],   comp:{thr:-24,rat:2,att:30,rel:300,mk:2,on:false}},
+  'Cinéma':    {eq:[6,4,2,0,-1,-1,0,2,4,5],  comp:{thr:-20,rat:3,att:15,rel:200,mk:4,on:true}},
+  'Gaming':    {eq:[6,4,2,0,0,0,2,4,5,4],    comp:{thr:-12,rat:3,att:5,rel:100,mk:3,on:true}},
+  'Podcast':   {eq:[-2,0,2,4,4,3,2,1,0,-1],  comp:{thr:-20,rat:4,att:10,rel:150,mk:6,on:true}},
+  'Streaming': {eq:[2,1,0,1,2,2,2,3,3,2],    comp:{thr:-16,rat:4,att:8,rel:120,mk:5,on:true}},
+  'Flat':      {eq:[0,0,0,0,0,0,0,0,0,0],    comp:{thr:-18,rat:2,att:20,rel:200,mk:0,on:false}},
 };
 
-// ── INIT UI ──
+// ── INIT ──
 window.addEventListener('load', () => {
   buildEQ();
   buildPresets();
   buildSysPresets();
-  startDrawLoop();
+  startDraw();
+  document.getElementById('chk-notch').checked = false;
 });
 
 function buildEQ() {
@@ -333,9 +390,7 @@ function buildEQ() {
   EQ_FREQS.forEach((f, i) => {
     const d = document.createElement('div');
     d.className = 'eb';
-    d.innerHTML = `<div class="ev" id="ev${i}">0dB</div>
-      <input type="range" min="-15" max="15" value="0" step="0.5" oninput="eqSet(${i},this.value)">
-      <label>${EQ_LABS[i]}</label>`;
+    d.innerHTML = `<div class="ev" id="ev${i}">0dB</div><input type="range" min="-15" max="15" value="0" step="0.5" oninput="eqSet(${i},this.value)"><label>${EQ_LABS[i]}</label>`;
     c.appendChild(d);
   });
 }
@@ -344,8 +399,8 @@ function buildPresets() {
   const c = document.getElementById('eq-presets');
   Object.keys(EQ_PRESETS).forEach(n => {
     const b = document.createElement('button');
-    b.className = 'ep'; b.id = 'ep-' + n; b.textContent = n;
-    b.onclick = () => applyEQPreset(n);
+    b.className='ep'; b.id='ep-'+n; b.textContent=n;
+    b.onclick = () => applyEQ(n);
     c.appendChild(b);
   });
 }
@@ -354,8 +409,8 @@ function buildSysPresets() {
   const c = document.getElementById('sys-presets');
   Object.keys(SYS_PRESETS).forEach(n => {
     const b = document.createElement('button');
-    b.className = 'sys-btn'; b.textContent = n;
-    b.onclick = () => applySysPreset(n);
+    b.className='sys-btn'; b.textContent=n;
+    b.onclick = () => applySys(n);
     c.appendChild(b);
   });
 }
@@ -364,421 +419,477 @@ function buildSysPresets() {
 async function startEngine() {
   if (running) return;
   try {
-    // Capturer le son du PC (onglet/app/système)
-    // Chrome/Edge: getDisplayMedia avec audio:true capture le son système
     stream = await navigator.mediaDevices.getDisplayMedia({
-      video: true,   // requis par l'API, on ne l'utilise pas
+      video: true,
       audio: {
-        suppressLocalAudioPlayback: true, // coupe le son source pour éviter le double
+        suppressLocalAudioPlayback: true,
         echoCancellation: false,
         noiseSuppression: false,
         autoGainControl: false,
         sampleRate: 48000,
-      },
-      selfBrowserSurface: 'exclude',
-      surfaceSwitching: 'include',
-      monitorTypeSurfaces: 'include',
+      }
     });
-
-    // Arrêter la piste vidéo (on ne veut que l'audio)
     stream.getVideoTracks().forEach(t => t.stop());
-
     if (!stream.getAudioTracks().length) {
-      toast('Aucune piste audio capturée. Cochez "Partager le son système" dans la fenêtre.', 'warn');
+      toast('Aucune piste audio — cochez "Partager le son système"', 'warn');
       stream.getTracks().forEach(t => t.stop());
       return;
     }
-
-    AC = new(window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
-    if (AC.state === 'suspended') AC.resume();
-
+    AC = new(window.AudioContext||window.webkitAudioContext)({sampleRate:48000});
+    if (AC.state==='suspended') AC.resume();
     buildChain();
     running = true;
-
     document.getElementById('btn-start').style.display = 'none';
     document.getElementById('btn-stop').style.display  = '';
     document.getElementById('st-dot').classList.add('on');
-    document.getElementById('st-txt').textContent = 'Actif — ' + (AC.sampleRate/1000) + 'kHz — ' + stream.getAudioTracks()[0].label;
+    const lbl = stream.getAudioTracks()[0].label || '';
+    document.getElementById('st-txt').textContent = 'Actif — ' + (lbl || '48kHz');
     toast('Son PC capturé — EQ actif', 'ok');
-    // Détecter si c'est un onglet (tab) ou une app bureau
-    const label = stream.getAudioTracks()[0]?.label || '';
-    const isTab = label.toLowerCase().includes('tab') || label.toLowerCase().includes('onglet');
-    if (!isTab) {
-      setTimeout(() => {
-        toast('App bureau détectée — pour éviter le bruit: clic droit sur 🔊 → Mélangeur de volume → muter l\'app source', 'warn');
-      }, 2500);
-    }
-
-    stream.getAudioTracks()[0].addEventListener('ended', () => stopEngine());
+    const isTab = lbl.toLowerCase().includes('tab')||lbl.toLowerCase().includes('onglet');
+    if (!isTab) setTimeout(() => document.getElementById('guide').classList.add('show'), 900);
+    stream.getAudioTracks()[0].addEventListener('ended', stopEngine);
   } catch(e) {
-    if (e.name !== 'AbortError' && e.name !== 'NotAllowedError') {
-      toast('Erreur: ' + e.message, 'warn');
-    }
-    console.error(e);
+    if (e.name!=='AbortError'&&e.name!=='NotAllowedError') toast('Erreur: '+e.message,'warn');
   }
 }
 
 function buildChain() {
-  // Entrée
   const src = AC.createMediaStreamSource(stream);
 
-  // Gain entrée
-  inputGainNode = AC.createGain();
-  inputGainNode.gain.value = parseInt(document.getElementById('r-input').value) / 100;
+  inputGain = AC.createGain();
+  inputGain.gain.value = parseInt(document.getElementById('r-input').value)/100;
 
-  // Filtre passe-haut (coupe les artefacts basses fréquences)
+  // Gate de bruit : compresseur en mode gate (ratio très élevé, seuil bas)
+  gateNode = AC.createDynamicsCompressor();
+  gateNode.threshold.value = gateThresh;
+  gateNode.ratio.value     = 20;
+  gateNode.attack.value    = 0.001;
+  gateNode.release.value   = 0.1;
+  gateNode.knee.value      = 0;
+
+  // Coupure haute fréquence (coupe le sifflement/bruit d'air)
+  airCutNode = AC.createBiquadFilter();
+  airCutNode.type = airCutOn ? 'lowshelf' : 'allpass';
+  airCutNode.frequency.value = airCutFreq;
+  airCutNode.gain.value = -24;
+
+  // Filtre DC offset (élimine les composantes continues qui créent du bruit)
+  dcNode = AC.createBiquadFilter();
+  dcNode.type = 'highpass';
+  dcNode.frequency.value = dcOn ? 10 : 1;
+  dcNode.Q.value = 0.5;
+
   hpfNode = AC.createBiquadFilter();
   hpfNode.type = 'highpass';
   hpfNode.frequency.value = hpfFreq;
   hpfNode.Q.value = 0.5;
 
-  // Notch pour éliminer une fréquence parasite précise
   notchNode = AC.createBiquadFilter();
-  notchNode.type = 'notch';
+  notchNode.type = notchOn ? 'notch' : 'allpass';
   notchNode.frequency.value = notchFreq;
   notchNode.Q.value = notchQ;
-  notchNode.gain.value = notchEnabled ? -30 : 0;
 
-  // 10 filtres EQ
-  eqFilters = EQ_FREQS.map((hz, i) => {
+  eqFilters = EQ_FREQS.map((hz,i) => {
     const f = AC.createBiquadFilter();
-    f.type = 'peaking'; f.frequency.value = hz; f.Q.value = 1.0; f.gain.value = eqV[i];
+    f.type='peaking'; f.frequency.value=hz; f.Q.value=1.0; f.gain.value=eqV[i];
     return f;
   });
 
-  // Compresseur
   compNode = AC.createDynamicsCompressor();
   compNode.threshold.value = parseFloat(document.getElementById('c-thr').value);
   compNode.ratio.value     = parseFloat(document.getElementById('c-rat').value);
-  compNode.attack.value    = parseFloat(document.getElementById('c-att').value) / 1000;
-  compNode.release.value   = parseFloat(document.getElementById('c-rel').value) / 1000;
+  compNode.attack.value    = parseFloat(document.getElementById('c-att').value)/1000;
+  compNode.release.value   = parseFloat(document.getElementById('c-rel').value)/1000;
   compNode.knee.value      = 6;
 
   compMk = AC.createGain();
-  compMk.gain.value = compEnabled ? Math.pow(10, parseFloat(document.getElementById('c-mk').value) / 20) : 1;
+  compMk.gain.value = compEnabled ? Math.pow(10, parseFloat(document.getElementById('c-mk').value)/20) : 1;
 
-  // Panner stéréo
-  pannerNode = AC.createStereoPanner();
-  pannerNode.pan.value = parseFloat(document.getElementById('r-pan').value) / 100;
+  panNode = AC.createStereoPanner();
+  panNode.pan.value = parseFloat(document.getElementById('r-pan').value)/100;
 
-  // Master gain
+  detInsertNode = AC.createGain();
+  detInsertNode.gain.value = 1;
+
   masterNode = AC.createGain();
-  masterNode.gain.value = parseInt(document.getElementById('r-master').value) / 100;
+  masterNode.gain.value = parseInt(document.getElementById('r-master').value)/100;
 
-  // Analyser
   analyserNode = AC.createAnalyser();
   analyserNode.fftSize = 4096;
   analyserNode.smoothingTimeConstant = 0.82;
   analyserNode.minDecibels = -90;
   analyserNode.maxDecibels = -10;
 
-  // CHAÎNE: src → inputGain → eq[0..9] → comp → compMk → panner → master → analyser → dest
-  src.connect(inputGainNode);
-  inputGainNode.connect(hpfNode);
+  // CHAÎNE: src→input→hpf→notch→eq[0..9]→comp→mk→pan→detInsert→master→analyser→dest
+  src.connect(inputGain);
+  inputGain.connect(dcNode);
+  dcNode.connect(gateOn ? gateNode : hpfNode);
+  if (gateOn) gateNode.connect(hpfNode);
   hpfNode.connect(notchNode);
   let node = notchNode;
   eqFilters.forEach(f => { node.connect(f); node = f; });
   node.connect(compNode);
   compNode.connect(compMk);
-  compMk.connect(pannerNode);
-  pannerNode.connect(masterNode);
+  compMk.connect(panNode);
+  panNode.connect(detInsertNode);
+  detInsertNode.connect(masterNode);
   masterNode.connect(analyserNode);
   analyserNode.connect(AC.destination);
 }
 
 function stopEngine() {
-  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
-  if (AC) { AC.close(); AC = null; }
-  eqFilters = []; compNode = null; masterNode = null; analyserNode = null;
-  running = false;
-  document.getElementById('btn-start').style.display = '';
-  document.getElementById('btn-stop').style.display  = 'none';
+  if (stream) { stream.getTracks().forEach(t=>t.stop()); stream=null; }
+  if (AC) { AC.close(); AC=null; }
+  eqFilters=[]; compNode=null; masterNode=null; analyserNode=null;
+  hpfNode=null; notchNode=null; inputGain=null; detInsertNode=null;
+  autoFilters=[]; running=false;
+  document.getElementById('btn-start').style.display='';
+  document.getElementById('btn-stop').style.display='none';
   document.getElementById('st-dot').classList.remove('on');
-  document.getElementById('st-txt').textContent = 'Inactif';
-  document.getElementById('vu-l').style.height = '0%';
-  document.getElementById('vu-r').style.height = '0%';
+  document.getElementById('st-txt').textContent='Inactif';
+  document.getElementById('vu-l').style.height='0%';
+  document.getElementById('vu-r').style.height='0%';
+  document.getElementById('det-status').textContent='Lance la capture…';
+  document.getElementById('det-list').innerHTML='';
   toast('Arrêté');
 }
 
-// ── CONTRÔLES ──
+// ── CONTRÔLES EQ ──
 function eqSet(i, val) {
   eqV[i] = parseFloat(val);
   if (eqFilters[i]) eqFilters[i].gain.value = bypass ? 0 : eqV[i];
-  const el = document.getElementById('ev' + i);
-  el.textContent = (eqV[i] >= 0 ? '+' : '') + eqV[i] + 'dB';
-  el.style.color = eqV[i] > 0 ? 'var(--px)' : eqV[i] < 0 ? '#4488ff' : 'var(--py)';
-  document.querySelectorAll('.ep').forEach(b => b.classList.remove('on'));
+  const el = document.getElementById('ev'+i);
+  el.textContent = (eqV[i]>=0?'+':'')+eqV[i]+'dB';
+  el.style.color = eqV[i]>0?'var(--px)':eqV[i]<0?'#4488ff':'var(--py)';
+  document.querySelectorAll('.ep').forEach(b=>b.classList.remove('on'));
 }
 
-function applyEQPreset(name) {
+function applyEQ(name) {
   const vals = EQ_PRESETS[name]; if (!vals) return;
-  vals.forEach((v, i) => {
-    eqV[i] = v;
-    if (eqFilters[i]) eqFilters[i].gain.value = bypass ? 0 : v;
+  vals.forEach((v,i) => {
+    eqV[i]=v;
+    if (eqFilters[i]) eqFilters[i].gain.value = bypass?0:v;
     const sl = document.querySelector(`#eq-bands .eb:nth-child(${i+1}) input`);
-    const ev = document.getElementById('ev' + i);
-    if (sl) sl.value = v;
-    if (ev) { ev.textContent = (v>=0?'+':'')+v+'dB'; ev.style.color = v>0?'var(--px)':v<0?'#4488ff':'var(--py)'; }
+    const ev = document.getElementById('ev'+i);
+    if (sl) sl.value=v;
+    if (ev) { ev.textContent=(v>=0?'+':'')+v+'dB'; ev.style.color=v>0?'var(--px)':v<0?'#4488ff':'var(--py)'; }
   });
-  document.querySelectorAll('.ep').forEach(b => b.classList.toggle('on', b.textContent === name));
-  toast('Preset: ' + name, 'ok');
+  document.querySelectorAll('.ep').forEach(b=>b.classList.toggle('on',b.textContent===name));
+  toast('EQ: '+name,'ok');
 }
 
-function resetEQ() { applyEQPreset('Neutre'); document.querySelectorAll('.ep').forEach(b=>b.classList.remove('on')); }
-
-function applySysPreset(name) {
-  const p = SYS_PRESETS[name]; if (!p) return;
-  applyEQPreset('Neutre');
-  p.eq.forEach((v, i) => {
-    eqV[i] = v;
-    if (eqFilters[i]) eqFilters[i].gain.value = bypass ? 0 : v;
-    const sl = document.querySelector(`#eq-bands .eb:nth-child(${i+1}) input`);
-    const ev = document.getElementById('ev' + i);
-    if (sl) sl.value = v;
-    if (ev) { ev.textContent = (v>=0?'+':'')+v+'dB'; ev.style.color = v>0?'var(--px)':v<0?'#4488ff':'var(--py)'; }
-  });
-  if (p.comp) {
-    document.getElementById('c-thr').value = p.comp.thr;
-    document.getElementById('c-rat').value = p.comp.rat;
-    document.getElementById('c-att').value = p.comp.att;
-    document.getElementById('c-rel').value = p.comp.rel;
-    document.getElementById('c-mk').value  = p.comp.mk;
-    document.getElementById('chk-comp').checked = p.comp.on;
-    compEnabled = p.comp.on;
-    updComp();
-  }
-  document.querySelectorAll('.sys-btn').forEach(b => b.classList.toggle('on', b.textContent === name));
-  toast('Preset système: ' + name, 'ok');
+function resetEQ() {
+  applyEQ('Neutre');
+  document.querySelectorAll('.ep').forEach(b=>b.classList.remove('on'));
 }
 
 function toggleBypass() {
-  bypass = !bypass;
-  eqFilters.forEach((f, i) => { if (f) f.gain.value = bypass ? 0 : eqV[i]; });
-  const btn = document.getElementById('btn-bp');
-  btn.textContent = bypass ? 'EQ OFF' : 'EQ ON';
-  btn.classList.toggle('on', !bypass);
+  bypass=!bypass;
+  eqFilters.forEach((f,i)=>{ if(f) f.gain.value=bypass?0:eqV[i]; });
+  const btn=document.getElementById('btn-bp');
+  btn.textContent=bypass?'EQ OFF':'EQ ON';
+  btn.classList.toggle('on',!bypass);
 }
 
-function setMaster(v) {
-  if (masterNode) masterNode.gain.value = parseInt(v) / 100;
-  document.getElementById('v-master').textContent = v + '%';
+function applySys(name) {
+  const p=SYS_PRESETS[name]; if(!p) return;
+  p.eq.forEach((v,i)=>{
+    eqV[i]=v; if(eqFilters[i]) eqFilters[i].gain.value=bypass?0:v;
+    const sl=document.querySelector(`#eq-bands .eb:nth-child(${i+1}) input`);
+    const ev=document.getElementById('ev'+i);
+    if(sl) sl.value=v;
+    if(ev){ev.textContent=(v>=0?'+':'')+v+'dB';ev.style.color=v>0?'var(--px)':v<0?'#4488ff':'var(--py)';}
+  });
+  document.querySelectorAll('.ep').forEach(b=>b.classList.remove('on'));
+  if (p.comp) {
+    document.getElementById('c-thr').value=p.comp.thr;
+    document.getElementById('c-rat').value=p.comp.rat;
+    document.getElementById('c-att').value=p.comp.att;
+    document.getElementById('c-rel').value=p.comp.rel;
+    document.getElementById('c-mk').value=p.comp.mk;
+    document.getElementById('chk-comp').checked=p.comp.on;
+    compEnabled=p.comp.on; updComp();
+  }
+  document.querySelectorAll('.sys-btn').forEach(b=>b.classList.toggle('on',b.textContent===name));
+  toast('Preset: '+name,'ok');
 }
-function setInputGain(v) {
-  if (inputGainNode) inputGainNode.gain.value = parseInt(v) / 100;
-  document.getElementById('v-input').textContent = v + '%';
-}
-function setStereoW(v) { document.getElementById('v-width').textContent = v + '%'; }
+
+// ── AUTRES CONTRÔLES ──
+function setMaster(v) { if(masterNode) masterNode.gain.value=parseInt(v)/100; document.getElementById('v-master').textContent=v+'%'; }
+function setInput(v)  { if(inputGain)  inputGain.gain.value=parseInt(v)/100;  document.getElementById('v-input').textContent=v+'%'; }
+function setWidth(v)  { document.getElementById('v-width').textContent=v+'%'; }
 function setPan(v) {
-  const f = parseInt(v) / 100;
-  if (pannerNode) pannerNode.pan.value = f;
-  document.getElementById('v-pan').textContent = f === 0 ? 'C' : (f > 0 ? 'R' + Math.abs(v) : 'L' + Math.abs(v));
+  const f=parseInt(v)/100;
+  if(panNode) panNode.pan.value=f;
+  document.getElementById('v-pan').textContent=f===0?'C':(f>0?'R'+Math.abs(v):'L'+Math.abs(v));
 }
-function setMono(on) { toast(on ? 'Mode mono' : 'Mode stéréo'); }
-function setPhase(on) { toast(on ? 'Phase inversée' : 'Phase normale'); }
-function setComp(on) { compEnabled = on; updComp(); }
 function setHPF(v) {
-  hpfFreq = parseInt(v);
-  if (hpfNode) hpfNode.frequency.value = hpfFreq;
-  document.getElementById('v-hpf').textContent = v + 'Hz';
+  hpfFreq=parseInt(v);
+  if(hpfNode) hpfNode.frequency.value=hpfFreq;
+  document.getElementById('v-hpf').textContent=v+'Hz';
 }
-function setNotchFreq(v) {
-  notchFreq = parseFloat(v);
-  if (notchNode) notchNode.frequency.value = notchFreq;
-  document.getElementById('v-notch').textContent = v + 'Hz';
+function setNotchF(v) {
+  notchFreq=parseFloat(v);
+  if(notchNode) notchNode.frequency.value=notchFreq;
+  document.getElementById('v-notchf').textContent=v+'Hz';
 }
 function setNotchQ(v) {
-  notchQ = parseFloat(v);
-  if (notchNode) notchNode.Q.value = notchQ;
-  document.getElementById('v-notchq').textContent = 'Q' + v;
+  notchQ=parseFloat(v);
+  if(notchNode) notchNode.Q.value=notchQ;
+  document.getElementById('v-notchq').textContent='Q'+v;
 }
-function setNotch(on) {
-  notchEnabled = on;
-  if (notchNode) notchNode.type = on ? 'notch' : 'allpass';
-  toast(on ? 'Notch activé à ' + notchFreq + 'Hz' : 'Notch désactivé');
+function toggleNotch(on) {
+  notchOn=on;
+  if(notchNode) notchNode.type=on?'notch':'allpass';
+  toast(on?'Notch '+notchFreq+'Hz activé':'Notch désactivé');
 }
 function quickNotch47() {
-  notchFreq = 47; notchQ = 10; notchEnabled = true;
-  document.getElementById('r-notch').value = 47;
-  document.getElementById('r-notchq').value = 10;
-  document.getElementById('chk-notch').checked = true;
-  document.getElementById('v-notch').textContent = '47Hz';
-  document.getElementById('v-notchq').textContent = 'Q10';
-  if (notchNode) { notchNode.type = 'notch'; notchNode.frequency.value = 47; notchNode.Q.value = 10; }
-  toast('Bruit 47Hz coupé', 'ok');
+  notchFreq=47; notchQ=10; notchOn=true;
+  document.getElementById('r-notchf').value=47;
+  document.getElementById('r-notchq').value=10;
+  document.getElementById('chk-notch').checked=true;
+  document.getElementById('v-notchf').textContent='47Hz';
+  document.getElementById('v-notchq').textContent='Q10';
+  if(notchNode){notchNode.type='notch';notchNode.frequency.value=47;notchNode.Q.value=10;}
+  toast('Bruit 47Hz coupé','ok');
 }
-
-function setFx(k, v) { document.getElementById('ev-' + k).textContent = v + '%'; }
-
+function setGate(on) {
+  gateOn = on;
+  document.getElementById('row-gate-thr').style.opacity = on ? '1' : '.4';
+  if (!AC || !gateNode) { toast(on?'Gate activé':'Gate désactivé'); return; }
+  // Reconnecter la chaîne avec/sans gate
+  try { inputGain.disconnect(); gateNode.disconnect(); dcNode.disconnect(); } catch(e) {}
+  inputGain.connect(dcNode);
+  if (on) { dcNode.connect(gateNode); gateNode.connect(hpfNode); }
+  else     { dcNode.connect(hpfNode); }
+  toast(on ? 'Gate activé — bruit de fond coupé' : 'Gate désactivé', on?'ok':'');
+}
+function setGateThresh(v) {
+  gateThresh = parseInt(v);
+  if (gateNode) gateNode.threshold.value = gateThresh;
+  document.getElementById('v-gate').textContent = v + 'dB';
+}
+function setAirCut(on) {
+  airCutOn = on;
+  document.getElementById('row-aircut').style.opacity = on ? '1' : '.4';
+  if (airCutNode) airCutNode.type = on ? 'highshelf' : 'allpass';
+  toast(on ? 'Air cut activé — bruit haute fréquence coupé' : 'Air cut désactivé', on?'ok':'');
+}
+function setAirCutFreq(v) {
+  airCutFreq = parseInt(v);
+  if (airCutNode) airCutNode.frequency.value = airCutFreq;
+  document.getElementById('v-aircut').textContent = (v/1000).toFixed(0) + 'k';
+}
+function setDC(on) {
+  dcOn = on;
+  if (dcNode) dcNode.frequency.value = on ? 10 : 1;
+  toast(on ? 'Filtre DC activé' : 'Filtre DC désactivé');
+}
+function setMono(on) { toast(on?'Mode mono':'Mode stéréo'); }
+function setComp(on) { compEnabled=on; updComp(); }
 function updComp() {
-  const t = parseFloat(document.getElementById('c-thr').value);
-  const r = parseFloat(document.getElementById('c-rat').value);
-  const a = parseFloat(document.getElementById('c-att').value);
-  const rel = parseFloat(document.getElementById('c-rel').value);
-  const mk = parseFloat(document.getElementById('c-mk').value);
-  document.getElementById('cv-thr').textContent = t + 'dB';
-  document.getElementById('cv-rat').textContent = r + ':1';
-  document.getElementById('cv-att').textContent = a + 'ms';
-  document.getElementById('cv-rel').textContent = rel + 'ms';
-  document.getElementById('cv-mk').textContent  = mk + 'dB';
-  if (compNode) {
-    compNode.threshold.value = t;
-    compNode.ratio.value     = r;
-    compNode.attack.value    = a / 1000;
-    compNode.release.value   = rel / 1000;
+  const t=parseFloat(document.getElementById('c-thr').value);
+  const r=parseFloat(document.getElementById('c-rat').value);
+  const a=parseFloat(document.getElementById('c-att').value);
+  const rel=parseFloat(document.getElementById('c-rel').value);
+  const mk=parseFloat(document.getElementById('c-mk').value);
+  document.getElementById('cv-thr').textContent=t+'dB';
+  document.getElementById('cv-rat').textContent=r+':1';
+  document.getElementById('cv-att').textContent=a+'ms';
+  document.getElementById('cv-rel').textContent=rel+'ms';
+  document.getElementById('cv-mk').textContent=mk+'dB';
+  if(compNode){compNode.threshold.value=t;compNode.ratio.value=r;compNode.attack.value=a/1000;compNode.release.value=rel/1000;}
+  if(compMk) compMk.gain.value=compEnabled?Math.pow(10,mk/20):1;
+}
+function closeGuide() { document.getElementById('guide').classList.remove('show'); toast('EQ actif','ok'); }
+
+// ── DÉTECTEUR DE DISTORSION ──
+function analyzeSpectrum(fd, sr) {
+  const N=fd.length, binHz=sr/(N*2), issues=[];
+  const win=8;
+  for (let i=win+2; i<Math.min(N-win, Math.round(18000/binHz)); i++) {
+    if(fd[i]<-65) continue;
+    let avg=0;
+    for(let j=i-win;j<=i+win;j++) avg+=fd[j];
+    avg/=(win*2+1);
+    const diff=fd[i]-avg;
+    if(diff>9) {
+      const freq=Math.round(i*binHz);
+      if(freq<30) continue;
+      const last=issues[issues.length-1];
+      if(!last||freq-last.freq>60) issues.push({freq,diff,type:freq<250?'Réso basse':freq<2000?'Réso mid':'Réso haute',sev:diff>16?'h':'l',gain:-(diff*.65)});
+      else if(diff>last.diff) issues[issues.length-1]={freq,diff,type:freq<250?'Réso basse':freq<2000?'Réso mid':'Réso haute',sev:diff>16?'h':'l',gain:-(diff*.65)};
+    }
   }
-  if (compMk) compMk.gain.value = compEnabled ? Math.pow(10, mk / 20) : 1;
+  const maxB=Math.max(...Array.from(fd.slice(0,150)));
+  if(maxB>-3) issues.unshift({freq:0,diff:99,type:'Clipping — baisser le gain',sev:'h',gain:0});
+  return issues.sort((a,b)=>b.diff-a.diff).slice(0,5);
 }
 
-// ── SPECTRE + VU ──
-const cv  = document.getElementById('cv-spec');
-const ctx = cv.getContext('2d');
-const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-let peakHold = -100, peakTimer = 0;
+function updateDetUI(issues) {
+  const dot=document.getElementById('det-dot');
+  const st=document.getElementById('det-status');
+  const list=document.getElementById('det-list');
+  if(!running){dot.className='dot grey';st.textContent='Lance la capture…';list.innerHTML='';return;}
+  if(!issues.length){dot.className='dot green';st.textContent='✓ Aucune distorsion';list.innerHTML='';return;}
+  dot.className='dot red';
+  st.textContent=issues.length+' problème(s) détecté(s)';
+  list.innerHTML=issues.map(iss=>{
+    if(iss.freq===0) return `<div class="det-item"><span class="det-freq">—</span><span class="det-type">${iss.type}</span><span class="det-sev h">CLIP</span></div>`;
+    const fl=iss.freq>=1000?(iss.freq/1000).toFixed(1)+'k':iss.freq;
+    return `<div class="det-item"><span class="det-freq">${fl}Hz</span><span class="det-type">${iss.type} +${iss.diff.toFixed(0)}dB</span><span class="det-sev ${iss.sev}">${iss.sev==='h'?'Fort':'Léger'}</span><span class="det-fix" onclick="applyFix(${iss.freq},${iss.gain.toFixed(1)})">Fix</span></div>`;
+  }).join('');
+}
 
-function startDrawLoop() {
-  function resize() { cv.width = cv.offsetWidth; cv.height = cv.offsetHeight; }
-  window.addEventListener('resize', resize); resize();
+function applyFix(freq, gain) {
+  if(!AC||!detInsertNode){toast('Lance la capture d\'abord','warn');return;}
+  const f=AC.createBiquadFilter();
+  f.type=gain<-10?'notch':'peaking';
+  f.frequency.value=freq; f.Q.value=freq<300?5:8;
+  f.gain.value=gain<-10?0:gain;
+  detInsertNode.disconnect();
+  detInsertNode.connect(f);
+  f.connect(masterNode);
+  autoFilters.push({node:f,freq});
+  toast('Correction '+freq+'Hz appliquée','ok');
+}
+
+function toggleAutoFix() {
+  autoFix=!autoFix;
+  const btn=document.getElementById('dbt-auto');
+  btn.classList.toggle('on',autoFix);
+  btn.textContent=autoFix?'● Auto ON':'Auto';
+  toast(autoFix?'Auto-correction ON':'Auto-correction OFF');
+}
+
+function manualScan() {
+  if(!analyserNode){toast('Lance la capture d\'abord','warn');return;}
+  document.getElementById('det-dot').className='dot pulse';
+  document.getElementById('det-status').textContent='Analyse…';
+  setTimeout(()=>{
+    const fd=new Float32Array(analyserNode.frequencyBinCount);
+    analyserNode.getFloatFrequencyData(fd);
+    const issues=analyzeSpectrum(fd,AC.sampleRate);
+    updateDetUI(issues);
+    if(autoFix) issues.filter(i=>i.freq>0&&i.sev==='h').forEach(i=>{
+      if(!autoFilters.some(f=>Math.abs(f.freq-i.freq)<40)) applyFix(i.freq,i.gain);
+    });
+  },500);
+}
+
+function clearFixes() {
+  autoFilters.forEach(f=>{try{f.node.disconnect();}catch(e){}});
+  autoFilters=[];
+  if(detInsertNode&&masterNode){try{detInsertNode.disconnect();}catch(e){} detInsertNode.connect(masterNode);}
+  document.getElementById('det-dot').className='dot grey';
+  document.getElementById('det-status').textContent='Corrections supprimées';
+  document.getElementById('det-list').innerHTML='';
+  toast('Corrections effacées');
+}
+
+setInterval(()=>{
+  if(!running||!analyserNode) return;
+  if(Date.now()-lastScan<3000) return;
+  lastScan=Date.now();
+  const fd=new Float32Array(analyserNode.frequencyBinCount);
+  analyserNode.getFloatFrequencyData(fd);
+  const issues=analyzeSpectrum(fd,AC.sampleRate);
+  updateDetUI(issues);
+  if(autoFix) issues.filter(i=>i.freq>0&&i.sev==='h').slice(0,2).forEach(i=>{
+    if(!autoFilters.some(f=>Math.abs(f.freq-i.freq)<40)) applyFix(i.freq,i.gain);
+  });
+},1000);
+
+// ── SPECTRE ──
+const cv=document.getElementById('cv');
+const cx=cv.getContext('2d');
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function startDraw(){
+  function resize(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;}
+  window.addEventListener('resize',resize);resize();
   draw();
 }
 
-function draw() {
+function draw(){
   requestAnimationFrame(draw);
-  const W = cv.width, H = cv.height;
-  ctx.fillStyle = '#06060e';
-  ctx.fillRect(0, 0, W, H);
+  const W=cv.width,H=cv.height;
+  cx.fillStyle='#06060e';cx.fillRect(0,0,W,H);
+  const sr=AC?AC.sampleRate:48000;
 
-  const sr = AC ? AC.sampleRate : 48000;
-
-  // Grille dB
-  [-72,-60,-48,-36,-24,-12,0].forEach(db => {
-    const y = dbY(db, H);
-    ctx.strokeStyle = db === 0 ? 'rgba(255,255,255,.1)' : 'rgba(255,255,255,.04)';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.2)';
-    ctx.font = '8px monospace'; ctx.textAlign = 'left';
-    ctx.fillText(db + 'dB', 3, y - 2);
+  [-72,-60,-48,-36,-24,-12,0].forEach(db=>{
+    const y=dbY(db,H);
+    cx.strokeStyle=db===0?'rgba(255,255,255,.1)':'rgba(255,255,255,.04)';
+    cx.lineWidth=.5;cx.beginPath();cx.moveTo(0,y);cx.lineTo(W,y);cx.stroke();
+    cx.fillStyle='rgba(255,255,255,.2)';cx.font='8px monospace';cx.textAlign='left';
+    cx.fillText(db+'dB',3,y-2);
+  });
+  [20,50,100,200,500,1000,2000,5000,10000,20000].forEach(f=>{
+    const x=fX(f,W,sr);
+    cx.strokeStyle='rgba(255,255,255,.04)';cx.lineWidth=.5;
+    cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,H-14);cx.stroke();
+    cx.fillStyle='rgba(255,255,255,.2)';cx.font='8px monospace';cx.textAlign='center';
+    cx.fillText(f>=1000?f/1000+'k':f,x,H-3);
   });
 
-  // Grille fréquences
-  [20,50,100,200,500,1000,2000,5000,10000,20000].forEach(f => {
-    const x = fX(f, W, sr);
-    ctx.strokeStyle = 'rgba(255,255,255,.04)';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H - 14); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.2)';
-    ctx.font = '8px monospace'; ctx.textAlign = 'center';
-    ctx.fillText(f >= 1000 ? f/1000 + 'k' : f, x, H - 3);
-  });
-
-  if (!analyserNode || !running) return;
-
-  const N = analyserNode.frequencyBinCount;
-  const fd = new Float32Array(N);
-  const td = new Uint8Array(analyserNode.fftSize);
+  if(!analyserNode||!running) return;
+  const N=analyserNode.frequencyBinCount;
+  const fd=new Float32Array(N),td=new Uint8Array(analyserNode.fftSize);
   analyserNode.getFloatFrequencyData(fd);
   analyserNode.getByteTimeDomainData(td);
 
-  // Zone remplie
-  ctx.beginPath(); ctx.moveTo(0, H);
-  let domF = 0, domM = -Infinity;
-  for (let i = 1; i < N; i++) {
-    const freq = i * sr / analyserNode.fftSize;
-    if (freq > 22000) break;
-    const x = fX(freq, W, sr), y = dbY(fd[i], H);
-    ctx.lineTo(x, y);
-    if (fd[i] > domM) { domM = fd[i]; domF = freq; }
+  cx.beginPath();cx.moveTo(0,H);
+  let domF=0,domM=-Infinity;
+  for(let i=1;i<N;i++){
+    const freq=i*sr/analyserNode.fftSize;
+    if(freq>22000) break;
+    const x=fX(freq,W,sr),y=dbY(fd[i],H);
+    cx.lineTo(x,y);
+    if(fd[i]>domM){domM=fd[i];domF=freq;}
   }
-  ctx.lineTo(W, H); ctx.closePath();
-  const g = ctx.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, 'rgba(255,45,120,.65)');
-  g.addColorStop(.5, 'rgba(255,124,0,.35)');
-  g.addColorStop(1, 'rgba(255,45,120,.04)');
-  ctx.fillStyle = g; ctx.fill();
+  cx.lineTo(W,H);cx.closePath();
+  const g=cx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(255,45,120,.65)');g.addColorStop(.5,'rgba(255,124,0,.3)');g.addColorStop(1,'rgba(255,45,120,.03)');
+  cx.fillStyle=g;cx.fill();
+  cx.beginPath();
+  for(let i=1;i<N;i++){const freq=i*sr/analyserNode.fftSize;if(freq>22000)break;const x=fX(freq,W,sr),y=dbY(fd[i],H);i===1?cx.moveTo(x,y):cx.lineTo(x,y);}
+  cx.strokeStyle='rgba(255,45,120,.9)';cx.lineWidth=1.5;cx.stroke();
 
-  // Ligne du spectre
-  ctx.beginPath();
-  for (let i = 1; i < N; i++) {
-    const freq = i * sr / analyserNode.fftSize;
-    if (freq > 22000) break;
-    const x = fX(freq, W, sr), y = dbY(fd[i], H);
-    i === 1 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.strokeStyle = 'rgba(255,45,120,.9)'; ctx.lineWidth = 1.5; ctx.stroke();
-
-  // Fréquence dominante
-  if (domF > 30 && domM > -70) {
-    document.getElementById('dom-freq').textContent = Math.round(domF) + ' Hz';
-    const ni = Math.round(12 * Math.log2(domF / 440)) + 69;
-    document.getElementById('dom-note').textContent = NOTES[((ni % 12) + 12) % 12] + Math.floor(ni / 12 - 1);
-  } else {
-    document.getElementById('dom-freq').textContent = '— Hz';
-    document.getElementById('dom-note').textContent = '—';
+  if(domF>30&&domM>-70){
+    document.getElementById('dom-freq').textContent=Math.round(domF)+' Hz';
+    const ni=Math.round(12*Math.log2(domF/440))+69;
+    document.getElementById('dom-note').textContent=NOTES[((ni%12)+12)%12]+Math.floor(ni/12-1);
   }
 
-  // VU-mètres + mesures
-  let sumSq = 0, peak = 0;
-  for (let i = 0; i < td.length; i++) {
-    const v = (td[i] - 128) / 128;
-    sumSq += v * v;
-    peak = Math.max(peak, Math.abs(v));
-  }
-  const rms = Math.sqrt(sumSq / td.length);
-  const rmsDB  = rms > 0 ? 20 * Math.log10(rms) : -100;
-  const peakDB = peak > 0 ? 20 * Math.log10(peak) : -100;
-  const lufs   = rmsDB - 0.691;
-
-  const pctOf60 = db => Math.max(0, Math.min(100, (db + 60) / 60 * 100));
-  document.getElementById('m-rms').style.width  = pctOf60(rmsDB) + '%';
-  document.getElementById('m-peak').style.width = pctOf60(peakDB) + '%';
-  document.getElementById('m-peak').style.background = peakDB > -3 ? 'var(--px)' : 'var(--py)';
-  document.getElementById('m-lufs').style.width = pctOf60(lufs) + '%';
-  document.getElementById('v-rms').textContent  = Math.round(rmsDB) + 'dB';
-  document.getElementById('v-peak').textContent = Math.round(peakDB) + 'dB';
-  document.getElementById('v-lufs').textContent = Math.round(lufs) + ' LU';
-
-  // Réduction de gain compresseur
-  if (compNode) document.getElementById('cv-gr').textContent = Math.round(compNode.reduction) + 'dB';
-
-  // VU bars
-  const vuH = Math.max(0, Math.min(100, (rmsDB + 60) / 60 * 100));
-  document.getElementById('vu-l').style.height = vuH + '%';
-  document.getElementById('vu-r').style.height = Math.min(100, vuH * (0.92 + Math.random() * .1)) + '%';
+  // VU + mesures
+  let sum=0,pk=0;
+  for(let i=0;i<td.length;i++){const v=(td[i]-128)/128;sum+=v*v;pk=Math.max(pk,Math.abs(v));}
+  const rms=Math.sqrt(sum/td.length);
+  const rmsDB=rms>0?20*Math.log10(rms):-100;
+  const pkDB=pk>0?20*Math.log10(pk):-100;
+  const lufs=rmsDB-0.691;
+  const p60=db=>Math.max(0,Math.min(100,(db+60)/60*100));
+  document.getElementById('m-rms').style.width=p60(rmsDB)+'%';
+  document.getElementById('m-peak').style.width=p60(pkDB)+'%';
+  document.getElementById('m-peak').style.background=pkDB>-3?'var(--px)':'var(--py)';
+  document.getElementById('m-lufs').style.width=p60(lufs)+'%';
+  document.getElementById('v-rms').textContent=Math.round(rmsDB)+'dB';
+  document.getElementById('v-peak').textContent=Math.round(pkDB)+'dB';
+  document.getElementById('v-lufs').textContent=Math.round(lufs)+' LU';
+  if(compNode) document.getElementById('cv-gr').textContent=Math.round(compNode.reduction)+'dB';
+  const vuH=p60(rmsDB);
+  document.getElementById('vu-l').style.height=vuH+'%';
+  document.getElementById('vu-r').style.height=Math.min(100,vuH*(0.9+Math.random()*.12))+'%';
 }
 
-function fX(freq, W, sr) { return Math.log2(Math.max(freq,20)/20) / Math.log2((sr/2)/20) * W; }
-function dbY(db, H) { return H * (1 - Math.max(0, Math.min(1, (db + 90) / 90))); }
-
-
-// ── GUIDE ANTI-BRUIT ──
-function showGuide() {
-  const msg = `SUPPRIMER LE BRUIT PARASITE
-  
-Pour les apps bureau (Apple Music, Spotify, VLC…) :
-
-MÉTHODE 1 — Mélangeur de volume (Windows)
-  1. Clic droit sur l'icône son 🔊 dans la barre des tâches
-  2. Ouvrir le Mélangeur de volume
-  3. Trouver l'app (ex: Apple Music) et baisser à 0
-  → Tu n'entends que le son traité par Zenkari
-
-MÉTHODE 2 — VB-Cable (gratuit, permanent)
-  1. Télécharger VB-Cable sur vb-audio.com
-  2. Dans l'app (Apple Music...) → paramètres → sortie audio = CABLE Input
-  3. Dans Zenkari → capturer l'onglet OU utiliser CABLE Output comme micro
-  → Propre, sans aucun bruit
-
-MÉTHODE 3 — Onglet Chrome (le plus simple)
-  → Utiliser la version web de Spotify / Apple Music / YouTube
-  → La capture d'onglet supprime automatiquement le doublé`;
-  alert(msg);
-}
+function fX(f,W,sr){return Math.log2(Math.max(f,20)/20)/Math.log2((sr/2)/20)*W;}
+function dbY(db,H){return H*(1-Math.max(0,Math.min(1,(db+90)/90)));}
 
 let toastT;
-function toast(msg, type='') {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.className = 'show' + (type?' '+type:'');
-  clearTimeout(toastT); toastT = setTimeout(() => el.className='', 2800);
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='show'+(type?' '+type:'');
+  clearTimeout(toastT);toastT=setTimeout(()=>el.className='',2600);
 }
 </script>
 </body>
